@@ -64,7 +64,6 @@ if (!FIRST_USER_PASSWORD) {
 }
 
 // === Prepare encryption key ===
-// We need 32 byte key for AES-256. So pad or trim the ENC_KEY_RAW accordingly.
 function prepareKey(key) {
   const buf = Buffer.alloc(32, 0);
   const keyBuf = Buffer.from(key);
@@ -122,7 +121,7 @@ app.use(cors({
 app.use(bodyParser.json());
 app.use(express.static("public"));
 
-// === System Prompt updated as per your instruction ===
+// === System Prompt ===
 const SYSTEM_PROMPT_PATH = path.join(__dirname, "system.instruction.prompt");
 let systemPromptText = `You are Anand, an AI assistant developed and trained by ABC, built with the help of Smart Tell Line.`;
 
@@ -148,25 +147,31 @@ app.post("/chat", async (req, res) => {
     return res.status(400).json({ reply: "Invalid input" });
   }
 
-  // Password system for first time user chat start:
-  if (!message.includes(FIRST_USER_PASSWORD) && !userHistories[userId]) {
-    logger.warn(`Unauthorized access attempt by ${userId}`);
-    return res.status(403).json({ reply: "Unauthorized access. Provide password." });
+  const trimmedMessage = message.trim();
+  const expectedPassword = FIRST_USER_PASSWORD.trim();
+
+  // Agar user pahli baar hai to password check karo
+  if (!userHistories[userId]) {
+    if (trimmedMessage === expectedPassword) {
+      // Password sahi hai, user ko authorize karo
+      const model = ai.getGenerativeModel({
+        model: "gemini-2.5-flash-preview-05-20",
+        generationConfig: { temperature: 1.0, topK: 1, topP: 1 },
+        systemInstruction: { role: "system", parts: [{ text: systemPromptText }] },
+      });
+      const chat = model.startChat({ history: [] });
+      userHistories[userId] = { model, chat };
+      requestCounter[userId] = 0;
+      logger.info(`User ${userId} authenticated with password.`);
+      return res.json({ reply: "Access granted. You can now start chatting." });
+    } else {
+      // Password galat hai
+      logger.warn(`Unauthorized access attempt by ${userId}`);
+      return res.status(403).json({ reply: "Unauthorized access. Please provide the correct password." });
+    }
   }
 
-  if (!userHistories[userId] && message.includes(FIRST_USER_PASSWORD)) {
-    const model = ai.getGenerativeModel({
-      model: "gemini-2.5-flash-preview-05-20",
-      generationConfig: { temperature: 1.0, topK: 1, topP: 1 },
-      systemInstruction: { role: "system", parts: [{ text: systemPromptText }] },
-    });
-    const chat = model.startChat({ history: [] });
-    userHistories[userId] = { model, chat };
-    requestCounter[userId] = 0;
-    logger.info(`User ${userId} authenticated with password.`);
-    return res.json({ reply: "Access granted. You can now start chatting." });
-  }
-
+  // Rate limiting check
   if (requestCounter[userId] >= MAX_REQUESTS_PER_DAY) {
     logger.warn(`User ${userId} exceeded daily request limit.`);
     return res.status(429).json({ reply: "Rate limit exceeded for today." });
@@ -175,10 +180,10 @@ app.post("/chat", async (req, res) => {
   try {
     requestCounter[userId]++;
     const result = await userHistories[userId].chat.sendMessage(message);
-    res.json({ reply: result.response.text() });
+    return res.json({ reply: result.response.text() });
   } catch (err) {
     logger.error(`Chat error: ${err.message}`);
-    res.status(500).json({ reply: "Anand is currently unavailable." });
+    return res.status(500).json({ reply: "Anand is currently unavailable." });
   }
 });
 
