@@ -45,7 +45,7 @@ const MAX_REQUESTS_PER_DAY = 50;
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Read env variables
+// === ENV Vars ===
 const ENC_KEY_RAW = process.env.ENCRYPTION_KEY || "";
 const GOOGLE_API_KEY_RAW = process.env.GOOGLE_API_KEY || "";
 const FIRST_USER_PASSWORD = process.env.FIRST_USER_PASSWORD || "";
@@ -63,7 +63,7 @@ if (!FIRST_USER_PASSWORD) {
   process.exit(1);
 }
 
-// === Prepare encryption key ===
+// === Prepare Key ===
 function prepareKey(key) {
   const buf = Buffer.alloc(32, 0);
   const keyBuf = Buffer.from(key);
@@ -72,7 +72,7 @@ function prepareKey(key) {
 }
 const ENC_KEY = prepareKey(ENC_KEY_RAW);
 
-// === Encryption / Decryption Functions ===
+// === Encrypt / Decrypt ===
 function encrypt(text, key) {
   const iv = crypto.randomBytes(16);
   const cipher = crypto.createCipheriv("aes-256-cbc", key, iv);
@@ -90,10 +90,9 @@ function decrypt(encryptedText, key) {
   return decrypted;
 }
 
-// === Load or Encrypt Google API Key ===
+// === Load API Key ===
 function loadAPIKey() {
   if (!fs.existsSync(RUNTIME_FLAG_FILE)) {
-    // First time encrypt Google API key from env and save
     const encryptedKey = encrypt(GOOGLE_API_KEY_RAW, ENC_KEY);
     fs.writeFileSync(ENCRYPTED_API_FILE, encryptedKey);
     fs.writeFileSync(RUNTIME_FLAG_FILE, "ENCRYPTED: YES");
@@ -108,9 +107,16 @@ function loadAPIKey() {
 const API_KEY = loadAPIKey();
 const ai = new GoogleGenerativeAI(API_KEY);
 
+// ✅ === CORS Fix ===
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://anand-vdgu.onrender.com",              // Tumhara backend URL
+  "https://htmlcssjsvirsion.tiiny.site"            // Tumhara frontend code editor
+];
+
 app.use(cors({
   origin: function (origin, callback) {
-    if (!origin || origin === "http://localhost:3000") {
+    if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
       callback(new Error("Not allowed by CORS"));
@@ -129,7 +135,7 @@ if (fs.existsSync(SYSTEM_PROMPT_PATH)) {
   systemPromptText = fs.readFileSync(SYSTEM_PROMPT_PATH, "utf-8");
 }
 
-// === User session and rate limiting ===
+// === User Auth + Chat Setup ===
 let userHistories = {};
 let requestCounter = {};
 
@@ -147,31 +153,25 @@ app.post("/chat", async (req, res) => {
     return res.status(400).json({ reply: "Invalid input" });
   }
 
-  const trimmedMessage = message.trim();
-  const expectedPassword = FIRST_USER_PASSWORD.trim();
-
-  // Agar user pahli baar hai to password check karo
-  if (!userHistories[userId]) {
-    if (trimmedMessage === expectedPassword) {
-      // Password sahi hai, user ko authorize karo
-      const model = ai.getGenerativeModel({
-        model: "gemini-2.5-flash-preview-05-20",
-        generationConfig: { temperature: 1.0, topK: 1, topP: 1 },
-        systemInstruction: { role: "system", parts: [{ text: systemPromptText }] },
-      });
-      const chat = model.startChat({ history: [] });
-      userHistories[userId] = { model, chat };
-      requestCounter[userId] = 0;
-      logger.info(`User ${userId} authenticated with password.`);
-      return res.json({ reply: "Access granted. You can now start chatting." });
-    } else {
-      // Password galat hai
-      logger.warn(`Unauthorized access attempt by ${userId}`);
-      return res.status(403).json({ reply: "Unauthorized access. Please provide the correct password." });
-    }
+  if (!userHistories[userId] && message !== FIRST_USER_PASSWORD) {
+    logger.warn(`Unauthorized access attempt by ${userId}`);
+    return res.status(403).json({ reply: "Unauthorized access. Provide password." });
   }
 
-  // Rate limiting check
+  // New user, correct password
+  if (!userHistories[userId] && message === FIRST_USER_PASSWORD) {
+    const model = ai.getGenerativeModel({
+      model: "gemini-2.5-flash-preview-05-20",
+      generationConfig: { temperature: 1.0, topK: 1, topP: 1 },
+      systemInstruction: { role: "system", parts: [{ text: systemPromptText }] },
+    });
+    const chat = model.startChat({ history: [] });
+    userHistories[userId] = { model, chat };
+    requestCounter[userId] = 0;
+    logger.info(`User ${userId} authenticated with password.`);
+    return res.json({ reply: "Access granted. You can now start chatting." });
+  }
+
   if (requestCounter[userId] >= MAX_REQUESTS_PER_DAY) {
     logger.warn(`User ${userId} exceeded daily request limit.`);
     return res.status(429).json({ reply: "Rate limit exceeded for today." });
@@ -180,10 +180,10 @@ app.post("/chat", async (req, res) => {
   try {
     requestCounter[userId]++;
     const result = await userHistories[userId].chat.sendMessage(message);
-    return res.json({ reply: result.response.text() });
+    res.json({ reply: result.response.text() });
   } catch (err) {
     logger.error(`Chat error: ${err.message}`);
-    return res.status(500).json({ reply: "Anand is currently unavailable." });
+    res.status(500).json({ reply: "Anand is currently unavailable." });
   }
 });
 
