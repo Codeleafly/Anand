@@ -1,0 +1,1515 @@
+tumhara naam Anand hai tumhen ABC company Ne banaya Hai train hai develop kiya hai tum juicer ka sawal ka jawab dete ho aur suno Tum kabhi bhi user ko yah Nahin bolate khud Se samne Se apna user interface lekar ine user puche to bolate ho yah Raha tumhara user interface tum user Ko agar puchega user to yah batana ismein kaise update karte hain kuchh chij theme kaise change karte hain 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <title>Anand AI Assistant</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Fira+Code:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github.min.css" id="hljs-theme"/>
+
+  <style>
+    /* Base CSS variables - these will be overwritten by specific themes */
+    :root {
+      /* Default Light Theme Colors (Clean & Professional) */
+      --primary-accent: #5a80f0; /* A soft, modern blue for accents */
+      --secondary-accent: #e3f2fd; /* Lighter shade for assistant messages background */
+      --background-body-start: #f0f6ff; /* Very light, cool background gradient start */
+      --background-body-end: #ffffff;   /* White background gradient end */
+      --background-ui: #ffffff; /* White for header, chatbox, input */
+      --text-main: #2c3a4f;     /* Dark text for readability */
+      --text-secondary: #6b7a8f; /* Muted text for secondary info */
+      --border-color: #e0e5eb;   /* Light border */
+      --shadow-light: rgba(0, 0, 0, 0.05);
+      --shadow-medium: rgba(0, 0, 0, 0.1);
+      --shadow-strong: rgba(0, 0, 0, 0.15);
+
+      /* Message Bubbles */
+      --user-bubble-bg: var(--primary-accent);
+      --user-bubble-text: #ffffff;
+      --assistant-bubble-bg: var(--secondary-accent);
+      --assistant-bubble-text: var(--text-main);
+
+      /* Button Colors */
+      --button-bg: var(--primary-accent);
+      --button-hover-bg: #4a6fe0;
+      --button-shadow: rgba(90, 128, 240, 0.3);
+      --speak-button-bg: #28a745;
+      --speak-button-hover-bg: #218838;
+      --speak-button-shadow: rgba(40, 167, 69, 0.3);
+      --copy-button-bg: #8c9cb6;
+      --copy-button-hover-bg: #74849f;
+
+      /* Other UI elements */
+      --input-border-focus: var(--primary-accent);
+      --input-bg: var(--background-ui);
+      --input-text: var(--text-main);
+      --icon-color: var(--text-main);
+      --header-bg: var(--background-ui);
+      --footer-bg: var(--background-ui);
+
+      /* Settings Modal */
+      --modal-bg: var(--background-ui);
+      --modal-border: var(--border-color);
+      --modal-shadow: var(--shadow-strong);
+      --modal-text: var(--text-main);
+      --theme-option-bg: var(--background-ui);
+      --theme-option-border: var(--border-color);
+      --theme-option-hover-bg: var(--secondary-accent);
+      --theme-option-selected-bg: var(--primary-accent);
+      --theme-option-selected-text: #ffffff;
+      
+      /* Custom Theme Placeholder (will be filled by JS) */
+      --custom-primary-accent: #5a80f0;
+      --custom-secondary-accent: #e3f2fd;
+      --custom-background-body-start: #f0f6ff;
+      --custom-background-body-end: #ffffff;
+      --custom-background-ui: #ffffff;
+      --custom-text-main: #2c3a4f;
+      --custom-text-secondary: #6b7a8f;
+      --custom-border-color: #e0e5eb;
+    }
+
+    /* --- Theme Definitions --- */
+    /* Dark Theme */
+    .theme-dark {
+      --primary-accent: #bb86fc; /* Muted vibrant purple */
+      --secondary-accent: #2c2c2c; /* Dark grey for assistant bubble */
+      --background-body-start: #121212; /* Deep dark background */
+      --background-body-end: #1e1e1e;
+      --background-ui: #1e1e1e;
+      --text-main: #e0e0e0; /* Light text */
+      --text-secondary: #a0a0a0; /* Muted light text */
+      --border-color: #383838;
+      --shadow-light: rgba(0, 0, 0, 0.1);
+      --shadow-medium: rgba(0, 0, 0, 0.25);
+      --shadow-strong: rgba(0, 0, 0, 0.4);
+
+      --user-bubble-text: #ffffff;
+      --assistant-bubble-bg: var(--secondary-accent); /* Assistant message in dark background */
+      --assistant-bubble-text: var(--text-main);
+      --button-bg: var(--primary-accent);
+      --button-hover-bg: #a074d0;
+      --button-shadow: rgba(187, 134, 252, 0.3);
+      --copy-button-bg: #505050;
+      --copy-button-hover-bg: #606060;
+      --input-bg: #2c2c2c;
+      --input-text: var(--text-main);
+      --icon-color: var(--text-main);
+      --header-bg: var(--background-ui);
+      --footer-bg: var(--background-ui);
+
+      --modal-bg: #282828;
+      --modal-border: #404040;
+      --theme-option-bg: #1a1a1a;
+      --theme-option-border: #404040;
+      --theme-option-hover-bg: #353535;
+    }
+
+    /* Green Theme */
+    .theme-green {
+      --primary-accent: #28a745;
+      --secondary-accent: #d4edda;
+      --background-body-start: #e9f5ed;
+      --background-body-end: #f8fcf9;
+      --background-ui: #ffffff;
+      --text-main: #1f3d2d;
+      --text-secondary: #4a6c5a;
+
+      --button-bg: #28a745;
+      --button-hover-bg: #218838;
+      --button-shadow: rgba(40, 167, 69, 0.3);
+      --speak-button-bg: #007bff; /* Secondary button becomes blue */
+      --speak-button-hover-bg: #0069d9;
+      --speak-button-shadow: rgba(0, 123, 255, 0.3);
+    }
+
+    /* Red Theme */
+    .theme-red {
+      --primary-accent: #dc3545;
+      --secondary-accent: #f8d7da;
+      --background-body-start: #fcebeb;
+      --background-body-end: #fffcfc;
+      --background-ui: #ffffff;
+      --text-main: #502125;
+      --text-secondary: #8c4c51;
+
+      --button-bg: #dc3545;
+      --button-hover-bg: #c82333;
+      --button-shadow: rgba(220, 53, 69, 0.3);
+      --speak-button-bg: #007bff;
+      --speak-button-hover-bg: #0069d9;
+    }
+
+    /* Blue Theme */
+    .theme-blue {
+      --primary-accent: #007bff;
+      --secondary-accent: #cce5ff;
+      --background-body-start: #e6f2ff;
+      --background-body-end: #fcfdff;
+      --background-ui: #ffffff;
+      --text-main: #003366;
+      --text-secondary: #0056b3;
+
+      --button-bg: #007bff;
+      --button-hover-bg: #0069d9;
+      --button-shadow: rgba(0, 123, 255, 0.3);
+      --speak-button-bg: #28a745;
+      --speak-button-hover-bg: #218838;
+    }
+
+    /* Golden Theme (more like warm gold) */
+    .theme-golden {
+      --primary-accent: #ffc107;
+      --secondary-accent: #fff3cd;
+      --background-body-start: #fff9e6;
+      --background-body-end: #ffffee;
+      --background-ui: #ffffff;
+      --text-main: #856404;
+      --text-secondary: #b58d0a;
+
+      --button-bg: #ffc107;
+      --button-hover-bg: #e0a800;
+      --button-shadow: rgba(255, 193, 7, 0.3);
+      --speak-button-bg: #28a745;
+      --speak-button-hover-bg: #218838;
+    }
+
+    /* Purple Theme */
+    .theme-purple {
+      --primary-accent: #6f42c1;
+      --secondary-accent: #e5dff7;
+      --background-body-start: #f1ecfc;
+      --background-body-end: #fdfcff;
+      --background-ui: #ffffff;
+      --text-main: #3d216f;
+      --text-secondary: #603a9d;
+
+      --button-bg: #6f42c1;
+      --button-hover-bg: #5f37a5;
+      --button-shadow: rgba(111, 66, 193, 0.3);
+      --speak-button-bg: #28a745;
+      --speak-button-hover-bg: #218838;
+    }
+
+    /* Teal Theme */
+    .theme-teal {
+      --primary-accent: #20c997;
+      --secondary-accent: #d1f7ee;
+      --background-body-start: #e0faf4;
+      --background-body-end: #f7fdfb;
+      --background-ui: #ffffff;
+      --text-main: #145a4a;
+      --text-secondary: #2f8771;
+
+      --button-bg: #20c997;
+      --button-hover-bg: #1aa079;
+      --button-shadow: rgba(32, 201, 151, 0.3);
+      --speak-button-bg: #007bff;
+      --speak-button-hover-bg: #0069d9;
+    }
+
+    /* Orange Theme */
+    .theme-orange {
+      --primary-accent: #fd7e14;
+      --secondary-accent: #fff4e6;
+      --background-body-start: #ffeee0;
+      --background-body-end: #fffbf7;
+      --background-ui: #ffffff;
+      --text-main: #7a3a0e;
+      --text-secondary: #a8581e;
+
+      --button-bg: #fd7e14;
+      --button-hover-bg: #e06c00;
+      --button-shadow: rgba(253, 126, 20, 0.3);
+      --speak-button-bg: #28a745;
+      --speak-button-hover-bg: #218838;
+    }
+
+    /* Navy Theme */
+    .theme-navy {
+      --primary-accent: #001f3f;
+      --secondary-accent: #e0eefd;
+      --background-body-start: #eef4f9;
+      --background-body-end: #fcfdff;
+      --background-ui: #ffffff;
+      --text-main: #001020;
+      --text-secondary: #003366;
+
+      --button-bg: #001f3f;
+      --button-hover-bg: #00172f;
+      --button-shadow: rgba(0, 31, 63, 0.3);
+      --speak-button-bg: #28a745;
+      --speak-button-hover-bg: #218838;
+    }
+
+    /* Coral Theme */
+    .theme-coral {
+      --primary-accent: #ff6b6b;
+      --secondary-accent: #ffebeb;
+      --background-body-start: #fff0f0;
+      --background-body-end: #fff8f8;
+      --background-ui: #ffffff;
+      --text-main: #8c3a3a;
+      --text-secondary: #b34a4a;
+
+      --button-bg: #ff6b6b;
+      --button-hover-bg: #e05e5e;
+      --button-shadow: rgba(255, 107, 107, 0.3);
+      --speak-button-bg: #28a745;
+      --speak-button-hover-bg: #218838;
+    }
+
+    /* Royal Blue Theme */
+    .theme-royal-blue {
+      --primary-accent: #4169e1;
+      --secondary-accent: #e6eefd;
+      --background-body-start: #eff4ff;
+      --background-body-end: #fcfdff;
+      --background-ui: #ffffff;
+      --text-main: #1a2a4e;
+      --text-secondary: #315190;
+
+      --button-bg: #4169e1;
+      --button-hover-bg: #3257cd;
+      --button-shadow: rgba(65, 105, 225, 0.3);
+      --speak-button-bg: #28a745;
+      --speak-button-hover-bg: #218838;
+    }
+
+    /* Emerald Green Theme */
+    .theme-emerald-green {
+      --primary-accent: #2ecc71;
+      --secondary-accent: #eaf7f0;
+      --background-body-start: #e8fbed;
+      --background-body-end: #fcfdfe;
+      --background-ui: #ffffff;
+      --text-main: #1c5c3e;
+      --text-secondary: #278d52;
+
+      --button-bg: #2ecc71;
+      --button-hover-bg: #27ae60;
+      --button-shadow: rgba(46, 204, 113, 0.3);
+      --speak-button-bg: #007bff;
+      --speak-button-hover-bg: #0069d9;
+    }
+
+    /* Gold Theme */
+    .theme-gold {
+      --primary-accent: #d4af37;
+      --secondary-accent: #fdf8e6;
+      --background-body-start: #fffbe9;
+      --background-body-end: #fffefb;
+      --background-ui: #ffffff;
+      --text-main: #7a601e;
+      --text-secondary: #a07a2d;
+
+      --button-bg: #d4af37;
+      --button-hover-bg: #c09f2d;
+      --button-shadow: rgba(212, 175, 55, 0.3);
+      --speak-button-bg: #28a745;
+      --speak-button-hover-bg: #218838;
+    }
+
+    /* Magenta Theme */
+    .theme-magenta {
+      --primary-accent: #ff00ff;
+      --secondary-accent: #ffe0ff;
+      --background-body-start: #fff0ff;
+      --background-body-end: #fff8ff;
+      --background-ui: #ffffff;
+      --text-main: #800080;
+      --text-secondary: #a000a0;
+
+      --button-bg: #ff00ff;
+      --button-hover-bg: #e000e0;
+      --button-shadow: rgba(255, 0, 255, 0.3);
+      --speak-button-bg: #28a745;
+      --speak-button-hover-bg: #218838;
+    }
+
+    /* Custom Theme Class (applies custom CSS variables) */
+    .theme-custom {
+      --primary-accent: var(--custom-primary-accent);
+      --secondary-accent: var(--custom-secondary-accent);
+      --background-body-start: var(--custom-background-body-start);
+      --background-body-end: var(--custom-background-body-end);
+      --background-ui: var(--custom-background-ui);
+      --text-main: var(--custom-text-main);
+      --text-secondary: var(--custom-text-secondary);
+      --border-color: var(--custom-border-color);
+
+      --user-bubble-bg: var(--custom-primary-accent); /* User bubble uses custom primary */
+      --user-bubble-text: #ffffff; /* Assuming white text for user bubble */
+      --assistant-bubble-bg: var(--custom-secondary-accent); /* Assistant bubble uses custom secondary */
+      --assistant-bubble-text: var(--custom-text-main); /* Assistant text uses custom main text color */
+
+      --button-bg: var(--custom-primary-accent);
+      --button-hover-bg: var(--custom-primary-accent); /* Hover slightly darker for custom */
+      --button-shadow: rgba(var(--primary-accent-r), var(--primary-accent-g), var(--primary-accent-b), 0.3);
+      --speak-button-bg: var(--custom-secondary-accent); /* Speak button can also be customized */
+      --speak-button-hover-bg: var(--custom-secondary-accent); /* Hover slightly darker */
+      --speak-button-shadow: rgba(var(--speak-button-bg-r), var(--speak-button-bg-g), var(--speak-button-bg-b), 0.3);
+
+      --input-border-focus: var(--custom-primary-accent);
+      --input-bg: var(--custom-background-ui);
+      --input-text: var(--custom-text-main);
+      --icon-color: var(--custom-text-main);
+      --header-bg: var(--custom-background-ui);
+      --footer-bg: var(--custom-background-ui);
+
+      --modal-bg: var(--custom-background-ui);
+      --modal-border: var(--custom-border-color);
+      --modal-text: var(--custom-text-main);
+      --theme-option-bg: var(--custom-background-ui);
+      --theme-option-border: var(--custom-border-color);
+      --theme-option-hover-bg: var(--custom-secondary-accent); /* Custom theme hover */
+      --theme-option-selected-bg: var(--custom-primary-accent);
+      --theme-option-selected-text: #ffffff;
+    }
+
+
+    /* --- General Styling --- */
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif; /* Applied font */
+      background: linear-gradient(135deg, var(--background-body-start) 0%, var(--background-body-end) 100%);
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      color: var(--text-main);
+      overflow: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      transition: background 0.5s ease-in-out, color 0.5s ease-in-out;
+    }
+
+    .header {
+      background-color: var(--header-bg);
+      color: var(--primary-accent);
+      padding: 18px 25px;
+      text-align: center;
+      box-shadow: var(--shadow-light);
+      font-size: 1.6rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+      z-index: 10;
+      border-bottom: 1px solid var(--border-color);
+      transition: background-color 0.5s ease-in-out, border-color 0.5s ease-in-out, color 0.5s ease-in-out;
+    }
+    .header .title {
+      flex-grow: 1;
+      text-align: center;
+    }
+    .header i {
+      margin-right: 10px;
+      font-size: 1.8rem;
+      color: var(--icon-color);
+      transition: color 0.5s ease-in-out;
+    }
+    .header .title i {
+      color: inherit; /* Inherit color from header text */
+    }
+
+    /* Settings Button & Theme Toggle Button - Premium & Unique */
+    .control-btn {
+      background: none;
+      border: none;
+      font-size: 1.8rem;
+      cursor: pointer;
+      color: var(--icon-color);
+      transition: color 0.3s ease, transform 0.3s ease;
+      padding: 5px;
+      border-radius: 50%; /* Circular by default */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px; /* Fixed size for a premium look */
+      height: 48px;
+    }
+    .control-btn:hover {
+      color: var(--primary-accent);
+      background-color: rgba(var(--primary-accent-r), var(--primary-accent-g), var(--primary-accent-b), 0.1);
+    }
+    .settings-btn:hover {
+      transform: rotate(45deg); /* More pronounced rotation */
+    }
+
+    /* Unique shape for system theme toggle */
+    #system-theme-toggle-btn {
+      border-radius: 12px; /* Slightly rounded rectangle for unique shape */
+      width: 55px; /* Wider to accommodate icon and potentially subtle text/indicator */
+      height: 48px;
+      background-color: var(--border-color); /* Subtle background */
+      box-shadow: 0 2px 8px var(--shadow-light);
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    #system-theme-toggle-btn:hover {
+      background-color: var(--secondary-accent);
+      box-shadow: 0 4px 12px var(--shadow-medium);
+      transform: translateY(-2px); /* Slight lift on hover */
+    }
+    #system-theme-icon {
+        font-size: 1.6rem;
+        color: var(--text-main);
+        transition: color 0.3s ease;
+    }
+    #system-theme-toggle-btn:hover #system-theme-icon {
+        color: var(--primary-accent);
+    }
+
+    /* Chat Box */
+    #chat-box {
+      flex: 1;
+      overflow-y: auto;
+      padding: 25px 30px;
+      background-color: var(--background-ui);
+      border-radius: 20px;
+      margin: 20px 30px;
+      box-shadow: var(--shadow-medium);
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      transition: background-color 0.5s ease-in-out, box-shadow 0.5s ease-in-out;
+    }
+
+    /* Scrollbar Styling */
+    #chat-box::-webkit-scrollbar { width: 8px; }
+    #chat-box::-webkit-scrollbar-track { background: var(--border-color); border-radius: 10px; transition: background 0.5s ease-in-out;}
+    #chat-box::-webkit-scrollbar-thumb { background: var(--primary-accent); border-radius: 10px; }
+    #chat-box::-webkit-scrollbar-thumb:hover { background: var(--button-hover-bg); }
+
+    /* Message Bubbles */
+    .message {
+      display: flex;
+      animation: fadeIn 0.4s ease-out;
+    }
+    .message-content {
+      max-width: 70%;
+      padding: 16px 22px;
+      border-radius: 25px;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      position: relative;
+      font-size: 1rem;
+      box-shadow: 0 3px 12px var(--shadow-light);
+      transition: background-color 0.5s ease-in-out, color 0.5s ease-in-out, box-shadow 0.5s ease-in-out;
+    }
+    .user-message { justify-content: flex-end; }
+    .user-message .message-content {
+      background-color: var(--user-bubble-bg);
+      color: var(--user-bubble-text);
+      border-bottom-right-radius: 8px;
+    }
+    .assistant-message { justify-content: flex-start; }
+    .assistant-message .message-content {
+      background-color: var(--assistant-bubble-bg);
+      color: var(--assistant-bubble-text);
+      border-bottom-left-radius: 8px;
+    }
+
+    /* Input Area */
+    .input-area {
+      display: flex;
+      align-items: flex-end;
+      padding: 20px 30px;
+      background-color: var(--background-ui);
+      border-top: 1px solid var(--border-color);
+      gap: 18px;
+      box-shadow: 0 -5px 20px var(--shadow-light);
+      flex-shrink: 0;
+      transition: background-color 0.5s ease-in-out, border-color 0.5s ease-in-out, box-shadow 0.5s ease-in-out;
+    }
+
+    .input-area textarea {
+      flex: 1;
+      padding: 16px 25px;
+      border: 2px solid var(--border-color);
+      border-radius: 35px;
+      font-size: 1.05rem;
+      transition: all 0.3s ease, background-color 0.5s ease-in-out, color 0.5s ease-in-out, border-color 0.5s ease-in-out;
+      background-color: var(--input-bg);
+      color: var(--input-text);
+      outline: none;
+      resize: none;
+      min-height: 60px;
+      max-height: 200px;
+      overflow-y: auto;
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+      font-family: 'Poppins', sans-serif;
+    }
+    .input-area textarea::-webkit-scrollbar { display: none; }
+
+    .input-area textarea:focus {
+      border-color: var(--input-border-focus);
+      /* Dynamically generated RGB for shadow based on current primary accent color */
+      box-shadow: 0 0 0 0.3rem rgba(var(--primary-accent-r), var(--primary-accent-g), var(--primary-accent-b), 0.2);
+    }
+
+    /* Buttons */
+    .input-area button {
+      background: var(--button-bg);
+      border: none;
+      color: white;
+      padding: 16px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+      box-shadow: 0 6px 20px var(--button-shadow);
+      flex-shrink: 0;
+      width: 58px;
+      height: 58px;
+    }
+    .input-area button:hover {
+      background-color: var(--button-hover-bg);
+      transform: translateY(-4px);
+      box-shadow: 0 8px 25px var(--button-shadow);
+    }
+    .input-area button:active {
+      transform: translateY(0);
+      box-shadow: 0 3px 10px var(--button-shadow);
+    }
+    .input-area button#speak-btn {
+      background-color: var(--speak-button-bg);
+      box-shadow: 0 6px 20px var(--speak-button-shadow);
+    }
+    .input-area button#speak-btn:hover {
+      background-color: var(--speak-button-hover-bg);
+      box-shadow: 0 8px 25px var(--speak-button-shadow);
+    }
+    .input-area button i {
+      font-size: 24px;
+    }
+
+    /* Code Block & Copy Button Styling */
+    pre {
+      position: relative;
+      padding: 20px;
+      border-radius: 12px;
+      overflow-x: auto;
+      margin-top: 15px;
+      margin-bottom: 15px;
+      box-shadow: 0 5px 15px var(--shadow-strong);
+      transition: background-color 0.5s ease-in-out, border-color 0.5s ease-in-out, color 0.5s ease-in-out;
+    }
+    pre code {
+      font-family: 'Fira Code', 'JetBrains Mono', monospace; /* Applied code font */
+      font-size: 0.95rem;
+      display: block;
+      padding-right: 60px;
+      line-height: 1.5;
+    }
+    .copy-btn {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      padding: 8px 15px;
+      font-size: 0.85rem;
+      background: var(--copy-button-bg);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.2s ease, opacity 0.2s ease, transform 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      opacity: 0.9;
+      font-family: 'Poppins', sans-serif;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .copy-btn:hover {
+      background: var(--copy-button-hover-bg);
+      opacity: 1;
+      transform: translateY(-2px);
+    }
+    .copy-btn i {
+      font-size: 1.1rem;
+    }
+
+    /* Footer styling */
+    .app-footer {
+      padding: 15px 30px;
+      background-color: var(--footer-bg);
+      color: var(--text-secondary);
+      text-align: center;
+      font-size: 0.9rem;
+      border-top: 1px solid var(--border-color);
+      font-family: 'Poppins', sans-serif;
+      box-shadow: var(--shadow-light);
+      flex-shrink: 0;
+      transition: background-color 0.5s ease-in-out, color 0.5s ease-in-out, border-color 0.5s ease-in-out;
+    }
+
+    /* --- Settings Modal --- */
+    .modal-backdrop.show { opacity: 0.4; } /* Lighter backdrop */
+
+    .settings-modal .modal-content {
+        background-color: var(--modal-bg);
+        border: 1px solid var(--modal-border);
+        border-radius: 15px;
+        box-shadow: var(--modal-shadow);
+        color: var(--modal-text);
+        transition: background-color 0.5s ease-in-out, border-color 0.5s ease-in-out, color 0.5s ease-in-out, box-shadow 0.5s ease-in-out;
+    }
+    .settings-modal .modal-header {
+        border-bottom: 1px solid var(--modal-border);
+        padding: 15px 20px;
+        flex-direction: column; /* Stack title and subtitle */
+        align-items: flex-start;
+    }
+    .settings-modal .modal-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: var(--primary-accent);
+    }
+    .settings-modal .modal-subtitle {
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+        margin-top: 5px;
+    }
+    .settings-modal .btn-close {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        color: var(--text-secondary);
+        opacity: 1;
+        transition: color 0.3s ease;
+    }
+    .settings-modal .btn-close:hover {
+        color: var(--primary-accent);
+        opacity: 1;
+    }
+    .settings-modal .modal-body {
+        padding: 20px;
+    }
+    .theme-options {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        gap: 15px;
+    }
+    .theme-option {
+        border: 2px solid var(--theme-option-border);
+        border-radius: 10px;
+        padding: 15px;
+        cursor: pointer;
+        text-align: center;
+        font-size: 0.9rem;
+        font-weight: 500;
+        background-color: var(--theme-option-bg);
+        color: var(--modal-text);
+        transition: all 0.3s ease;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100px;
+    }
+    .theme-option:hover {
+        background-color: var(--theme-option-hover-bg);
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    .theme-option.selected {
+        border-color: var(--primary-accent);
+        background-color: var(--theme-option-selected-bg);
+        color: var(--theme-option-selected-text);
+        box-shadow: 0 5px 20px var(--button-shadow);
+        transform: translateY(-2px);
+    }
+    .theme-option.selected .theme-preview-box {
+      border-color: #ffffff; /* White border for selected preview */
+    }
+    .theme-option .theme-preview-box {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        margin-bottom: 10px;
+        border: 2px solid var(--border-color);
+        box-shadow: inset 0 0 5px rgba(0,0,0,0.1);
+        transition: border-color 0.3s ease;
+    }
+
+    /* Specific theme preview box colors */
+    .theme-option[data-theme="system"] .theme-preview-box { background: linear-gradient(to right, #5a80f0 50%, #bb86fc 50%); } /* Light & Dark mix */
+    .theme-option[data-theme="light-blue"] .theme-preview-box { background-color: #5a80f0; }
+    .theme-option[data-theme="dark"] .theme-preview-box { background-color: #bb86fc; }
+    .theme-option[data-theme="green"] .theme-preview-box { background-color: #28a745; }
+    .theme-option[data-theme="red"] .theme-preview-box { background-color: #dc3545; }
+    .theme-option[data-theme="blue"] .theme-preview-box { background-color: #007bff; }
+    .theme-option[data-theme="golden"] .theme-preview-box { background-color: #ffc107; }
+    .theme-option[data-theme="purple"] .theme-preview-box { background-color: #6f42c1; }
+    .theme-option[data-theme="teal"] .theme-preview-box { background-color: #20c997; }
+    .theme-option[data-theme="orange"] .theme-preview-box { background-color: #fd7e14; }
+    .theme-option[data-theme="navy"] .theme-preview-box { background-color: #001f3f; }
+    .theme-option[data-theme="coral"] .theme-preview-box { background-color: #ff6b6b; }
+    .theme-option[data-theme="royal-blue"] .theme-preview-box { background-color: #4169e1; }
+    .theme-option[data-theme="emerald-green"] .theme-preview-box { background-color: #2ecc71; }
+    .theme-option[data-theme="gold"] .theme-preview-box { background-color: #d4af37; }
+    .theme-option[data-theme="magenta"] .theme-preview-box { background-color: #ff00ff; }
+    .theme-option[data-theme="custom"] .theme-preview-box { 
+      background: linear-gradient(135deg, var(--custom-primary-accent) 50%, var(--custom-secondary-accent) 50%); 
+    }
+
+
+    /* Custom Theme Section */
+    .custom-theme-section {
+      margin-top: 25px;
+      padding-top: 20px;
+      border-top: 1px solid var(--modal-border);
+    }
+    .color-picker-group {
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .color-picker-group label {
+      flex-basis: 120px;
+      font-weight: 500;
+      color: var(--modal-text);
+      font-size: 0.9rem;
+    }
+    .color-picker-group input[type="color"] {
+      width: 40px;
+      height: 40px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      padding: 0;
+      background: none;
+      transition: transform 0.2s ease;
+    }
+    .color-picker-group input[type="color"]::-webkit-color-swatch-wrapper {
+      padding: 0;
+    }
+    .color-picker-group input[type="color"]::-webkit-color-swatch {
+      border: 1px solid var(--border-color);
+      border-radius: 5px;
+    }
+    .color-picker-group input[type="color"]:hover {
+      transform: scale(1.1);
+    }
+    .color-picker-group input[type="text"] {
+      flex-grow: 1;
+      padding: 8px 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      background-color: var(--input-bg);
+      color: var(--input-text);
+      font-size: 0.9rem;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    .color-picker-group input[type="text"]:focus {
+      outline: none;
+      border-color: var(--primary-accent);
+      box-shadow: 0 0 0 0.2rem rgba(var(--primary-accent-r), var(--primary-accent-g), var(--primary-accent-b), 0.1);
+    }
+
+    #customCssInput {
+      width: 100%;
+      min-height: 100px;
+      padding: 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.85rem;
+      background-color: var(--input-bg);
+      color: var(--input-text);
+      resize: vertical;
+      margin-top: 10px;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    #customCssInput:focus {
+      outline: none;
+      border-color: var(--primary-accent);
+      box-shadow: 0 0 0 0.2rem rgba(var(--primary-accent-r), var(--primary-accent-g), var(--primary-accent-b), 0.1);
+    }
+
+    .apply-custom-btn {
+      background-color: var(--primary-accent);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 15px;
+      font-weight: 500;
+      transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+      box-shadow: 0 3px 10px var(--button-shadow);
+    }
+    .apply-custom-btn:hover {
+      background-color: var(--button-hover-bg);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px var(--button-shadow);
+    }
+
+    /* Keyframe for message animation */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .header { font-size: 1.4rem; padding: 15px 20px; }
+      .header i { font-size: 1.6rem; }
+      .control-btn { width: 44px; height: 44px; font-size: 1.6rem; }
+      #system-theme-toggle-btn { width: 50px; height: 44px; }
+      #system-theme-icon { font-size: 1.4rem; }
+      #chat-box { margin: 15px 20px; padding: 20px; gap: 15px; border-radius: 18px; }
+      .message-content { max-width: 90%; font-size: 0.9rem; padding: 14px 18px; border-radius: 20px; }
+      .user-message .message-content { border-bottom-right-radius: 6px; }
+      .assistant-message .message-content { border-bottom-left-radius: 6px; }
+      .input-area { padding: 15px 20px; gap: 12px; }
+      .input-area textarea { padding: 14px 20px; font-size: 0.95rem; min-height: 55px; border-radius: 30px; }
+      .input-area button { width: 52px; height: 52px; padding: 14px; }
+      .input-area button i { font-size: 20px; }
+      pre { padding: 18px; border-radius: 10px; }
+      pre code { font-size: 0.9rem; padding-right: 50px; }
+      .copy-btn { top: 10px; right: 10px; padding: 6px 12px; font-size: 0.8rem; gap: 6px; }
+      .copy-btn i { font-size: 1rem; }
+      .app-footer { padding: 12px 20px; font-size: 0.85rem; }
+      .settings-modal .modal-title { font-size: 1.3rem; }
+      .settings-modal .modal-subtitle { font-size: 0.8rem; }
+      .theme-options { grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); }
+      .theme-option { padding: 10px; min-height: 90px; }
+      .theme-option .theme-preview-box { width: 30px; height: 30px; }
+    }
+
+    @media (max-width: 480px) {
+      .header { font-size: 1.2rem; padding: 12px 15px; }
+      .header i { font-size: 1.4rem; margin-right: 8px; }
+      .control-btn { width: 40px; height: 40px; font-size: 1.4rem; }
+      #system-theme-toggle-btn { width: 45px; height: 40px; }
+      #system-theme-icon { font-size: 1.2rem; }
+      #chat-box { margin: 10px 15px; padding: 15px; gap: 12px; border-radius: 15px; }
+      .message-content { max-width: 95%; font-size: 0.85rem; padding: 12px 16px; border-radius: 18px; }
+      .user-message .message-content { border-bottom-right-radius: 5px; }
+      .assistant-message .message-content { border-bottom-left-radius: 5px; }
+      .input-area { padding: 12px 15px; gap: 10px; }
+      .input-area textarea { padding: 12px 18px; font-size: 0.88rem; min-height: 50px; border-radius: 25px; }
+      .input-area button { width: 48px; height: 48px; padding: 12px; }
+      .input-area button i { font-size: 18px; }
+      pre { padding: 15px; border-radius: 8px; }
+      pre code { font-size: 0.85rem; padding-right: 40px; }
+      .copy-btn { top: 8px; right: 8px; padding: 5px 10px; font-size: 0.75rem; gap: 5px; }
+      .copy-btn i { font-size: 0.9rem; }
+      .app-footer { padding: 10px 15px; font-size: 0.8rem; }
+      .settings-modal .modal-dialog { margin: 0.5rem; }
+      .settings-modal .modal-title { font-size: 1.2rem; }
+      .theme-options { grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); }
+      .theme-option { font-size: 0.8rem; }
+      .theme-option .theme-preview-box { width: 30px; height: 30px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <button class="control-btn" id="system-theme-toggle-btn" title="Toggle System Theme">
+      <i class="fas fa-desktop" id="system-theme-icon"></i>
+    </button>
+    <div class="title"><i class="fas fa-robot"></i> Anand AI Assistant</div>
+    <button class="control-btn settings-btn" data-bs-toggle="modal" data-bs-target="#settingsModal" title="Settings">
+      <i class="fas fa-cog"></i>
+    </button>
+  </div>
+
+  <div id="chat-box"></div>
+
+  <div class="input-area">
+    <button id="speak-btn" onclick="speakLastResponse()" title="Speak Last Response">
+      <i class="fas fa-volume-up"></i>
+    </button>
+    <textarea id="user-input" placeholder="Ask Anand anything..." oninput="autoExpand(this)" rows="1" aria-label="Ask Anand anything..."></textarea>
+    <button id="send-btn" onclick="sendMessage()" title="Send Message">
+      <i class="fas fa-paper-plane"></i>
+    </button>
+  </div>
+
+  <div class="app-footer">
+    Powered by Smart Tell Line and ABC
+  </div>
+
+  <div class="modal fade settings-modal" id="settingsModal" tabindex="-1" aria-labelledby="settingsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="settingsModalLabel">App Settings</h5>
+          <p class="modal-subtitle">Customize your Anand AI Assistant experience</p>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <h6>Choose Theme:</h6>
+          <div class="theme-options">
+            <div class="theme-option" data-theme="system">
+              <div class="theme-preview-box"></div>
+              <span>System</span>
+            </div>
+            <div class="theme-option" data-theme="light-blue">
+              <div class="theme-preview-box"></div>
+              <span>Light Blue</span>
+            </div>
+            <div class="theme-option" data-theme="dark">
+              <div class="theme-preview-box"></div>
+              <span>Dark Theme</span>
+            </div>
+            <div class="theme-option" data-theme="green">
+              <div class="theme-preview-box"></div>
+              <span>Green</span>
+            </div>
+            <div class="theme-option" data-theme="red">
+              <div class="theme-preview-box"></div>
+              <span>Red</span>
+            </div>
+            <div class="theme-option" data-theme="blue">
+              <div class="theme-preview-box"></div>
+              <span>Blue</span>
+            </div>
+            <div class="theme-option" data-theme="golden">
+              <div class="theme-preview-box"></div>
+              <span>Golden</span>
+            </div>
+            <div class="theme-option" data-theme="purple">
+              <div class="theme-preview-box"></div>
+              <span>Purple</span>
+            </div>
+            <div class="theme-option" data-theme="teal">
+              <div class="theme-preview-box"></div>
+              <span>Teal</span>
+            </div>
+            <div class="theme-option" data-theme="orange">
+              <div class="theme-preview-box"></div>
+              <span>Orange</span>
+            </div>
+            <div class="theme-option" data-theme="navy">
+              <div class="theme-preview-box"></div>
+              <span>Navy</span>
+            </div>
+            <div class="theme-option" data-theme="coral">
+              <div class="theme-preview-box"></div>
+              <span>Coral</span>
+            </div>
+             <div class="theme-option" data-theme="royal-blue">
+              <div class="theme-preview-box"></div>
+              <span>Royal Blue</span>
+            </div>
+            <div class="theme-option" data-theme="emerald-green">
+              <div class="theme-preview-box"></div>
+              <span>Emerald Green</span>
+            </div>
+            <div class="theme-option" data-theme="gold">
+              <div class="theme-preview-box"></div>
+              <span>Gold</span>
+            </div>
+            <div class="theme-option" data-theme="magenta">
+              <div class="theme-preview-box"></div>
+              <span>Magenta</span>
+            </div>
+            <div class="theme-option" data-theme="custom">
+              <div class="theme-preview-box"></div>
+              <i class="fas fa-palette" style="font-size: 2rem; margin-bottom: 5px;"></i>
+              <span>Custom</span>
+            </div>
+          </div>
+
+          <div class="custom-theme-section">
+            <h6>Create Custom Theme:</h6>
+            <div class="color-picker-group">
+              <label for="primaryColor">Primary Accent:</label>
+              <input type="color" id="primaryColor" value="#5a80f0">
+              <input type="text" id="primaryColorHex" value="#5a80f0">
+            </div>
+            <div class="color-picker-group">
+              <label for="secondaryColor">Secondary Accent:</label>
+              <input type="color" id="secondaryColor" value="#e3f2fd">
+              <input type="text" id="secondaryColorHex" value="#e3f2fd">
+            </div>
+            <div class="color-picker-group">
+              <label for="bgColorStart">Background Start:</label>
+              <input type="color" id="bgColorStart" value="#f0f6ff">
+              <input type="text" id="bgColorStartHex" value="#f0f6ff">
+            </div>
+            <div class="color-picker-group">
+              <label for="bgColorEnd">Background End:</label>
+              <input type="color" id="bgColorEnd" value="#ffffff">
+              <input type="text" id="bgColorEndHex" value="#ffffff">
+            </div>
+            <div class="color-picker-group">
+              <label for="uiBgColor">UI Background:</label>
+              <input type="color" id="uiBgColor" value="#ffffff">
+              <input type="text" id="uiBgColorHex" value="#ffffff">
+            </div>
+             <div class="color-picker-group">
+              <label for="textColor">Main Text:</label>
+              <input type="color" id="textColor" value="#2c3a4f">
+              <input type="text" id="textColorHex" value="#2c3a4f">
+            </div>
+            <div class="color-picker-group">
+              <label for="borderColor">Border Color:</label>
+              <input type="color" id="borderColor" value="#e0e5eb">
+              <input type="text" id="borderColorHex" value="#e0e5eb">
+            </div>
+            <button class="apply-custom-btn" id="applyCustomThemeBtn">Apply Custom Theme</button>
+
+            <h6 class="mt-4">Advanced Custom CSS:</h6>
+            <textarea id="customCssInput" placeholder="Add your custom CSS here (e.g., body { font-size: 16px; })"></textarea>
+            <button class="apply-custom-btn" id="applyCustomCssBtn">Apply Custom CSS</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/11.0.0/marked.min.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+
+  <script>
+    // Highlight.js configuration
+    hljs.configure({ languages: ['javascript', 'html', 'xml', 'css', 'json', 'typescript', 'bash', 'markdown', 'python', 'java', 'csharp'] });
+
+    let lastAssistantReply = "";
+    // Using the original unique-chatlefy-user-id as requested
+    let userId = localStorage.getItem("unique-chatlefy-user-id"); 
+    if (!userId) {
+      userId = "chatlefy-user-" + Math.random().toString(36).substring(2, 15) + Date.now();
+      localStorage.setItem("unique-chatlefy-user-id", userId);
+    }
+
+    // --- Theme Management ---
+    const highlightJsLink = document.getElementById('hljs-theme');
+    const systemThemeToggleButton = document.getElementById('system-theme-toggle-btn');
+    const systemThemeIcon = document.getElementById('system-theme-icon');
+    const themeOptions = document.querySelectorAll('.theme-option');
+
+    const themes = {
+      'system': { class: 'theme-system', hljsLight: 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github.min.css', hljsDark: 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css' },
+      'light-blue': { class: 'theme-light-blue', hljs: 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github.min.css' },
+      'dark': { class: 'theme-dark', hljs: 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css' },
+      'green': { class: 'theme-green', hljs: 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github.min.css' },
+      'red': { class: 'theme-red', hljs: 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github.min.css' },
+      'blue': { class: 'theme-blue', hljs: 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github.min.css' },
+      'golden': { class: 'theme-golden', hljs: 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github.min.css' },
+      'purple': { class: 'theme-purple', hljs: 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github.min.css' },
+      'teal': { class: 'theme-teal', hljs: 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github.min.css' },
+      'orange': { class: 'theme-orange', hljs: 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github.min.css' },
+      'navy': { class: 'theme-navy', hljs: 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github.min.css' },
+      'coral': { class: 'theme-coral', hljs: 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github.min.css' },
+      'royal-blue': { class: 'theme-royal-blue', hljs: 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github.min.css' },
+      'emerald-green': { class: 'theme-emerald-green', hljs: 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github.min.css' },
+      'gold': { class: 'theme-gold', hljs: 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github.min.css' },
+      'magenta': { class: 'theme-magenta', hljs: 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github.min.css' },
+      'custom': { class: 'theme-custom', hljs: 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css' } // Default dark for custom code blocks
+    };
+
+    let activeTheme = 'light-blue'; // Default theme
+    let isSystemPreferenceDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+    // Custom theme elements
+    const primaryColorInput = document.getElementById('primaryColor');
+    const primaryColorHexInput = document.getElementById('primaryColorHex');
+    const secondaryColorInput = document.getElementById('secondaryColor');
+    const secondaryColorHexInput = document.getElementById('secondaryColorHex');
+    const bgColorStartInput = document.getElementById('bgColorStart');
+    const bgColorStartHexInput = document.getElementById('bgColorStartHex');
+    const bgColorEndInput = document.getElementById('bgColorEnd');
+    const bgColorEndHexInput = document.getElementById('bgColorEndHex');
+    const uiBgColorInput = document.getElementById('uiBgColor');
+    const uiBgColorHexInput = document.getElementById('uiBgColorHex');
+    const textColorInput = document.getElementById('textColor');
+    const textColorHexInput = document.getElementById('textColorHex');
+    const borderColorInput = document.getElementById('borderColor');
+    const borderColorHexInput = document.getElementById('borderColorHex');
+    const applyCustomThemeBtn = document.getElementById('applyCustomThemeBtn');
+    const customCssInput = document.getElementById('customCssInput');
+    const applyCustomCssBtn = document.getElementById('applyCustomCssBtn');
+
+    // Function to set RGB variables for dynamic shadows
+    function setPrimaryAccentRgbVariables(hexColor) {
+      if (!hexColor || hexColor.length !== 7) return; // Ensure valid hex
+      const r = parseInt(hexColor.slice(1, 3), 16);
+      const g = parseInt(hexColor.slice(3, 5), 16);
+      const b = parseInt(hexColor.slice(5, 7), 16);
+      document.documentElement.style.setProperty('--primary-accent-r', r);
+      document.documentElement.style.setProperty('--primary-accent-g', g);
+      document.documentElement.style.setProperty('--primary-accent-b', b);
+    }
+    function setSpeakButtonRgbVariables(hexColor) {
+      if (!hexColor || hexColor.length !== 7) return; // Ensure valid hex
+      const r = parseInt(hexColor.slice(1, 3), 16);
+      const g = parseInt(hexColor.slice(3, 5), 16);
+      const b = parseInt(hexColor.slice(5, 7), 16);
+      document.documentElement.style.setProperty('--speak-button-bg-r', r);
+      document.documentElement.style.setProperty('--speak-button-bg-g', g);
+      document.documentElement.style.setProperty('--speak-button-bg-b', b);
+    }
+
+    function applyTheme(themeName, source = 'manual') {
+      // Remove all existing theme classes from body
+      for (const key in themes) {
+        document.body.classList.remove(themes[key].class);
+      }
+
+      let hljsStyleSheet = "";
+      let actualThemeToApply = themeName;
+
+      // Handle system theme
+      if (themeName === 'system') {
+        isSystemPreferenceDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        actualThemeToApply = isSystemPreferenceDark ? 'dark' : 'light-blue';
+        document.body.classList.add(themes[actualThemeToApply].class); // Apply the derived dark/light theme class
+        hljsStyleSheet = isSystemPreferenceDark ? themes['system'].hljsDark : themes['system'].hljsLight;
+        systemThemeIcon.className = isSystemPreferenceDark ? 'fas fa-moon' : 'fas fa-sun'; // Font Awesome icons
+      } else if (themeName === 'custom') {
+        // Apply custom theme CSS variables
+        applyCustomThemeCSS();
+        document.body.classList.add(themes['custom'].class);
+        hljsStyleSheet = themes['custom'].hljs;
+        systemThemeIcon.className = 'fas fa-palette'; // Custom theme icon (Font Awesome)
+      } else {
+        // Apply pre-defined theme
+        document.body.classList.add(themes[themeName].class);
+        hljsStyleSheet = themes[themeName].hljs;
+        systemThemeIcon.className = 'fas fa-desktop'; // Reset icon if not system or custom (Font Awesome)
+      }
+
+      highlightJsLink.href = hljsStyleSheet;
+      
+      // Update custom CSS variables for primary/speak accent RGB (for shadows etc.)
+      const computedStyle = getComputedStyle(document.body);
+      setPrimaryAccentRgbVariables(computedStyle.getPropertyValue('--primary-accent').trim());
+      setSpeakButtonRgbVariables(computedStyle.getPropertyValue('--speak-button-bg').trim());
+
+      activeTheme = themeName; // Store the selected theme
+
+      if (source === 'manual') { // Only save if selected from modal, not system preference change
+        localStorage.setItem('selectedTheme', themeName);
+      }
+      updateThemeSelectionInModal(activeTheme); // Ensure modal selection is updated
+      applyCustomUserCss(); // Apply custom CSS after theme to ensure it overrides
+    }
+
+    // Function to update the selected class in the modal
+    function updateThemeSelectionInModal(selectedThemeName) {
+      themeOptions.forEach(option => {
+        if (option.dataset.theme === selectedThemeName) {
+          option.classList.add('selected');
+        } else {
+          option.classList.remove('selected');
+        }
+      });
+    }
+
+    // Initialize theme on page load
+    const savedTheme = localStorage.getItem('selectedTheme') || 'system'; // Default to 'system'
+    applyTheme(savedTheme, 'initial');
+
+    // Load and apply custom theme colors and CSS from local storage
+    function loadCustomThemeSettings() {
+        const savedCustomColors = JSON.parse(localStorage.getItem('customThemeColors'));
+        if (savedCustomColors) {
+            primaryColorInput.value = savedCustomColors.primaryAccent;
+            primaryColorHexInput.value = savedCustomColors.primaryAccent;
+            secondaryColorInput.value = savedCustomColors.secondaryAccent;
+            secondaryColorHexInput.value = savedCustomColors.secondaryAccent;
+            bgColorStartInput.value = savedCustomColors.bgColorStart;
+            bgColorStartHexInput.value = savedCustomColors.bgColorStart;
+            bgColorEndInput.value = savedCustomColors.bgColorEnd;
+            bgColorEndHexInput.value = savedCustomColors.bgColorEnd;
+            uiBgColorInput.value = savedCustomColors.uiBgColor;
+            uiBgColorHexInput.value = savedCustomColors.uiBgColor;
+            textColorInput.value = savedCustomColors.textColor;
+            textColorHexInput.value = savedCustomColors.textColor;
+            borderColorInput.value = savedCustomColors.borderColor;
+            borderColorHexInput.value = savedCustomColors.borderColor;
+            applyCustomThemeCSS(); // Apply immediately if custom is loaded
+        }
+        const savedCustomCss = localStorage.getItem('customUserCss');
+        if (savedCustomCss) {
+            customCssInput.value = savedCustomCss;
+            applyCustomUserCss();
+        }
+    }
+
+    // Apply custom theme CSS variables
+    function applyCustomThemeCSS() {
+        const root = document.documentElement;
+        root.style.setProperty('--custom-primary-accent', primaryColorInput.value);
+        root.style.setProperty('--custom-secondary-accent', secondaryColorInput.value);
+        root.style.setProperty('--custom-background-body-start', bgColorStartInput.value);
+        root.style.setProperty('--custom-background-body-end', bgColorEndInput.value);
+        root.style.setProperty('--custom-background-ui', uiBgColorInput.value);
+        root.style.setProperty('--custom-text-main', textColorInput.value);
+        root.style.setProperty('--custom-text-secondary', textColorInput.value); // Secondary text same as main for simplicity or define another
+        root.style.setProperty('--custom-border-color', borderColorInput.value);
+
+        // Update RGB for custom theme shadows
+        setPrimaryAccentRgbVariables(primaryColorInput.value);
+        // Assuming speak button will use primary or secondary accent for custom
+        setSpeakButtonRgbVariables(secondaryColorInput.value); // Example: speak button uses secondary accent
+    }
+
+    // Apply custom user-provided CSS
+    function applyCustomUserCss() {
+        let customStyleTag = document.getElementById('custom-user-css');
+        if (!customStyleTag) {
+            customStyleTag = document.createElement('style');
+            customStyleTag.id = 'custom-user-css';
+            document.head.appendChild(customStyleTag);
+        }
+        customStyleTag.textContent = customCssInput.value;
+    }
+
+    // Save custom theme colors to local storage
+    function saveCustomThemeColors() {
+        const customColors = {
+            primaryAccent: primaryColorInput.value,
+            secondaryAccent: secondaryColorInput.value,
+            bgColorStart: bgColorStartInput.value,
+            bgColorEnd: bgColorEndInput.value,
+            uiBgColor: uiBgColorInput.value,
+            textColor: textColorInput.value,
+            borderColor: borderColorInput.value
+        };
+        localStorage.setItem('customThemeColors', JSON.stringify(customColors));
+    }
+
+    // Save custom user CSS to local storage
+    function saveCustomUserCss() {
+        localStorage.setItem('customUserCss', customCssInput.value);
+    }
+
+    // Listen for system theme changes (if 'system' theme is active)
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+      if (activeTheme === 'system') {
+        applyTheme('system', 'system-preference');
+      }
+    });
+
+    // Add event listeners for theme options in the modal
+    themeOptions.forEach(option => {
+      option.addEventListener('click', () => {
+        const themeName = option.dataset.theme;
+        applyTheme(themeName, 'manual');
+        const modalElement = document.getElementById('settingsModal');
+        const modal = bootstrap.Modal.getInstance(modalElement);
+        if (modal) {
+            modal.hide();
+        }
+      });
+    });
+
+    // System Theme Toggle button handler on the header
+    systemThemeToggleButton.addEventListener('click', () => {
+      if (activeTheme === 'system') {
+        // If currently system, cycle to the opposite of current system preference
+        const nextTheme = isSystemPreferenceDark ? 'light-blue' : 'dark';
+        applyTheme(nextTheme, 'manual'); // Manually select a specific theme
+      } else if (activeTheme === 'dark') {
+        applyTheme('light-blue', 'manual');
+      } else if (activeTheme === 'light-blue') {
+        applyTheme('dark', 'manual');
+      } else {
+        // If any other specific theme (including custom) is active, clicking this button defaults to system mode
+        applyTheme('system', 'manual');
+      }
+       // Animate the icon
+      gsap.fromTo(systemThemeIcon, { scale: 0.8, rotation: 0 }, { scale: 1.1, rotation: 360, duration: 0.5, ease: "back.out(1.7)" });
+    });
+
+    // Custom theme color picker and text input sync
+    document.querySelectorAll('.color-picker-group input[type="color"]').forEach(input => {
+        input.addEventListener('input', (event) => {
+            const hexInput = document.getElementById(event.target.id + 'Hex');
+            hexInput.value = event.target.value;
+        });
+    });
+
+    document.querySelectorAll('.color-picker-group input[type="text"]').forEach(input => {
+        input.addEventListener('input', (event) => {
+            const colorInput = document.getElementById(event.target.id.replace('Hex', ''));
+            // Basic validation for hex color
+            if (/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/.test(event.target.value)) {
+                colorInput.value = event.target.value;
+            }
+        });
+    });
+
+    // Apply Custom Theme button handler
+    applyCustomThemeBtn.addEventListener('click', () => {
+        saveCustomThemeColors(); // Save colors to local storage
+        applyTheme('custom', 'manual'); // Apply the custom theme
+        const modalElement = document.getElementById('settingsModal');
+        const modal = bootstrap.Modal.getInstance(modalElement);
+        if (modal) {
+            modal.hide();
+        }
+    });
+
+    // Apply Custom CSS button handler
+    applyCustomCssBtn.addEventListener('click', () => {
+        saveCustomUserCss(); // Save custom CSS to local storage
+        applyCustomUserCss(); // Apply the custom CSS
+        alert('Custom CSS applied! It will override existing styles.');
+        const modalElement = document.getElementById('settingsModal');
+        const modal = bootstrap.Modal.getInstance(modalElement);
+        if (modal) {
+            modal.hide();
+        }
+    });
+
+    // Load custom settings when the DOM is ready
+    document.addEventListener('DOMContentLoaded', loadCustomThemeSettings);
+
+
+    // --- Core Chatbot Functions ---
+    function autoExpand(textarea) {
+      textarea.style.height = 'auto';
+      textarea.style.height = (textarea.scrollHeight) + 'px';
+    }
+
+    function sendMessage() {
+      const input = document.getElementById("user-input");
+      const message = input.value.trim();
+      if (!message) return;
+
+      displayMessage(message, "user");
+      input.value = "";
+      input.style.height = 'auto'; // Reset textarea height after sending
+
+      // Original backend call logic, not dummy responses
+      fetch("/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId, message })
+      })
+      .then(res => {
+        if (!res.ok) {
+          return res.text().then(text => { throw new Error(`HTTP ${res.status}: ${text}`); });
+        }
+        return res.json();
+      })
+      .then(data => {
+        displayMessage(data.reply, "assistant");
+      })
+      .catch(err => {
+        console.error("Error:", err);
+        displayMessage("I apologize, but Anand is currently unavailable. Please try again later.", "assistant");
+      });
+    }
+
+    function displayMessage(content, sender) {
+      const chatBox = document.getElementById("chat-box");
+      const msgDiv = document.createElement("div");
+      msgDiv.className = `message ${sender}-message`;
+      const messageContentDiv = document.createElement("div");
+      messageContentDiv.className = "message-content";
+
+      if (sender === "assistant") {
+        const html = marked.parse(content, {
+          highlight: (code, lang) => {
+            const language = hljs.getLanguage(lang) ? lang : 'plaintext';
+            return hljs.highlight(code, { language }).value;
+          },
+          gfm: true, breaks: true
+        });
+        messageContentDiv.innerHTML = html;
+        lastAssistantReply = messageContentDiv.textContent || "";
+        setTimeout(() => addCopyButtons(messageContentDiv), 100);
+      } else {
+        messageContentDiv.textContent = content;
+      }
+
+      msgDiv.appendChild(messageContentDiv);
+      chatBox.appendChild(msgDiv);
+      chatBox.scrollTop = chatBox.scrollHeight;
+
+      // GSAP animation for new message entry
+      gsap.fromTo(msgDiv,
+        { opacity: 0, y: 30, scale: 0.98 },
+        { opacity: 1, y: 0, scale: 1, duration: 0.5, ease: "power3.out" }
+      );
+    }
+
+    function addCopyButtons(container) {
+      container.querySelectorAll("pre").forEach(pre => {
+        pre.querySelectorAll(".copy-btn").forEach(btn => btn.remove()); // Remove existing to prevent duplicates
+
+        const code = pre.querySelector("code");
+        if (!code) return;
+
+        const btn = document.createElement("button");
+        btn.className = "copy-btn";
+        btn.innerHTML = '<i class="fas fa-copy"></i> Copy'; // Font Awesome copy icon
+
+        btn.onclick = () => {
+          navigator.clipboard.writeText(code.innerText)
+            .then(() => {
+              btn.innerHTML = '<i class="fas fa-check"></i> Copied!'; // Font Awesome check icon
+              gsap.to(btn, { backgroundColor: '#28a745', duration: 0.2 }); // Green for copied
+              setTimeout(() => {
+                btn.innerHTML = '<i class="fas fa-copy"></i> Copy'; // Back to original Font Awesome copy icon
+                gsap.to(btn, { backgroundColor: 'var(--copy-button-bg)', duration: 0.2 }); // Back to original
+              }, 1500);
+            })
+            .catch(() => {
+              btn.innerHTML = '<i class="fas fa-times"></i> Error'; // Font Awesome times icon
+              gsap.to(btn, { backgroundColor: '#dc3545', duration: 0.2 }); // Red for error
+              setTimeout(() => {
+                btn.innerHTML = '<i class="fas fa-copy"></i> Copy';
+                gsap.to(btn, { backgroundColor: 'var(--copy-button-bg)', duration: 0.2 });
+              }, 1500);
+            });
+        };
+
+        pre.style.position = "relative";
+        pre.appendChild(btn);
+      });
+    }
+
+    function speakLastResponse() {
+      if (!lastAssistantReply) {
+        alert("No message available to speak!");
+        return;
+      }
+      if ('speechSynthesis' in window) {
+        speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(lastAssistantReply);
+        utterance.lang = "en-US"; // Changed language to English
+        speechSynthesis.speak(utterance);
+        gsap.to("#speak-btn", { scale: 1.15, duration: 0.2, yoyo: true, repeat: 1, ease: "power1.inOut" });
+      } else {
+        alert("Sorry, your browser does not support speech synthesis.");
+      }
+    }
+
+    window.onload = () => {
+      displayMessage("Hello! I'm Anand, your AI assistant. How can I help you today?", "assistant");
+    };
+  </script>
+</body>
+</html>
