@@ -8,7 +8,7 @@ const crypto = require("crypto");
 const winston = require("winston");
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 
-// === Logger Setup ===
+// Logger Setup
 const logDir = path.join(__dirname, "logs");
 if (!fs.existsSync(logDir)) fs.mkdirSync(logDir);
 
@@ -36,7 +36,7 @@ const logger = winston.createLogger({
   ],
 });
 
-// === Constants & Env Vars ===
+// Constants & Env Vars
 const ENCRYPTED_API_FILE = path.join(__dirname, "encrypted.api-secure-00-qwertyzz00-un-guessable-.enc+encryption.app...AAdG");
 const RUNTIME_FLAG_FILE = path.join(__dirname, "encrypt.runtime.hhhtt");
 
@@ -45,13 +45,13 @@ const MAX_REQUESTS_PER_DAY = 50;
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// === ENV Vars ===
+// Env Vars
 const ENC_KEY_RAW = process.env.ENCRYPTION_KEY || "";
 const GOOGLE_API_KEY_RAW = process.env.GOOGLE_API_KEY || "";
 const FIRST_USER_PASSWORD = process.env.FIRST_USER_PASSWORD || "";
 
 if (!ENC_KEY_RAW || ENC_KEY_RAW.length > 32) {
-  logger.error("Invalid ENCRYPTION_KEY in .env (must be max 32 chars)");
+  logger.error("Invalid ENCRYPTION_KEY in .env (max 32 chars)");
   process.exit(1);
 }
 if (!GOOGLE_API_KEY_RAW) {
@@ -63,7 +63,6 @@ if (!FIRST_USER_PASSWORD) {
   process.exit(1);
 }
 
-// === Prepare Key ===
 function prepareKey(key) {
   const buf = Buffer.alloc(32, 0);
   const keyBuf = Buffer.from(key);
@@ -72,7 +71,6 @@ function prepareKey(key) {
 }
 const ENC_KEY = prepareKey(ENC_KEY_RAW);
 
-// === Encrypt / Decrypt ===
 function encrypt(text, key) {
   const iv = crypto.randomBytes(16);
   const cipher = crypto.createCipheriv("aes-256-cbc", key, iv);
@@ -90,7 +88,6 @@ function decrypt(encryptedText, key) {
   return decrypted;
 }
 
-// === Load API Key ===
 function loadAPIKey() {
   if (!fs.existsSync(RUNTIME_FLAG_FILE)) {
     const encryptedKey = encrypt(GOOGLE_API_KEY_RAW, ENC_KEY);
@@ -107,11 +104,11 @@ function loadAPIKey() {
 const API_KEY = loadAPIKey();
 const ai = new GoogleGenerativeAI(API_KEY);
 
-// ✅ === CORS Fix ===
+// CORS Setup
 const allowedOrigins = [
   "http://localhost:3000",
-  "https://anand-vdgu.onrender.com",              // Tumhara backend URL
-  "https://htmlcssjsvirsion.tiiny.site"            // Tumhara frontend code editor
+  "https://anand-vdgu.onrender.com",
+  "https://htmlcssjsvirsion.tiiny.site"
 ];
 
 app.use(cors({
@@ -127,15 +124,31 @@ app.use(cors({
 app.use(bodyParser.json());
 app.use(express.static("public"));
 
-// === System Prompt ===
+// === Dynamic System Instruction Load ===
 const SYSTEM_PROMPT_PATH = path.join(__dirname, "system.instruction.prompt");
-let systemPromptText = `You are Anand, an AI assistant developed and trained by ABC, built with the help of Smart Tell Line.`;
 
-if (fs.existsSync(SYSTEM_PROMPT_PATH)) {
-  systemPromptText = fs.readFileSync(SYSTEM_PROMPT_PATH, "utf-8");
+let systemPromptText;
+
+try {
+  if (fs.existsSync(SYSTEM_PROMPT_PATH)) {
+    const data = fs.readFileSync(SYSTEM_PROMPT_PATH, "utf-8");
+    if (data.trim().length === 0) {
+      logger.error("system.instruction.prompt file is empty. Exiting.");
+      process.exit(1);
+    }
+    systemPromptText = data.trim();
+    logger.info("System instruction prompt loaded from file.");
+  } else {
+    // Agar file nahi hai toh default system prompt lagao
+    systemPromptText = `You are Anand, an AI assistant developed and trained by ABC, built with the help of Smart Tell Line.`;
+    logger.info("System instruction prompt file not found. Using default prompt.");
+  }
+} catch (err) {
+  logger.error("Error reading system instruction prompt file: " + err.message);
+  process.exit(1); // Fail fast agar read error ho toh
 }
 
-// === User Auth + Chat Setup ===
+// User chat & auth
 let userHistories = {};
 let requestCounter = {};
 
