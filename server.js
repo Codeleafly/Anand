@@ -58,7 +58,7 @@ app.use(express.static(path.join(__dirname, "public")));
 // === AI Setup ===
 const ai = new GoogleGenAI({ apiKey: API_KEY });
 const SYSTEM_PROMPT_PATH = path.join(__dirname, "system.instruction.prompt");
-let systemPromptText = "You are Chatlefy, an AI assistant made by Smart Tell Line...";
+let systemPromptText = "You are Anand, an AI assistant made by ABC";
 if (fs.existsSync(SYSTEM_PROMPT_PATH)) {
   systemPromptText = fs.readFileSync(SYSTEM_PROMPT_PATH, "utf-8");
 } else {
@@ -163,11 +163,11 @@ app.post("/chat", async (req, res) => {
     res.json({ reply: replyText });
   } catch (err) {
     logger.error(`Chat error for ${userId}: ${err.message}`);
-    res.status(500).json({ reply: "Chatlefy is currently unavailable." });
+    res.status(500).json({ reply: "Anand is currently unavailable." });
   }
 });
 
 // === Start Server ===
 app.listen(PORT, () => {
-  logger.info(`Chatlefy running on http://localhost:${PORT}`);
+  logger.info(`Anand running on http://localhost:${PORT}`);
 });
